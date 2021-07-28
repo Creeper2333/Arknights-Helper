@@ -7,6 +7,7 @@ import time
 
 TIME_ELAPSE_SCRSHOT=3#检测间隔时间，太长则很迟钝，太短会频繁写入文件
 TIME_ELAPSE_BATTLE=50#战斗时间，减少无用截屏次数
+THRESHOLD_VALUE=100#识别阈值
 
 coordinates={
     'select_op':(1065,370),#在这里填上要选择的关卡的屏幕坐标
@@ -53,15 +54,15 @@ def sanity(img):
     #region.save('op_begin_btn.png')
     return imgcompare.image_contrast(region,tmp)
 def dosth(img_origin):
-    if(start_btn_cpr(img_origin)<100):
+    if(start_btn_cpr(img_origin)<THRESHOLD_VALUE):
             tap(coordinates['start_op'])
             return True
-    if(begin_btn_cpr(img_origin)<100):
+    if(begin_btn_cpr(img_origin)<THRESHOLD_VALUE):
         tap(coordinates['op_begin'])
         global flag_isinbattle
         flag_isinbattle=True
         return True
-    if(sanity(img_origin)<100):
+    if(sanity(img_origin)<THRESHOLD_VALUE):
         input('没有理智了')
         global flag_sanityempty
         flag_sanityempty=True
