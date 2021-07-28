@@ -1,7 +1,9 @@
+from operator import truediv
 import imgcompare
 from androidops import *
 from PIL import Image
 import sys
+import time
 
 coordinates={
     'select_op':(1065,370),
@@ -21,8 +23,9 @@ boxes={
 }
 
 def screenshot():
-    phone.scrcap('/sdcard/capture.png')
-    phone.pull('/sdcard/capture.png')
+    scrcap('/sdcard/capture.png')
+    time.sleep(1)
+    pull('/sdcard/capture.png')
 
 def start_btn_cpr(img):
     region=img.crop(boxes['start_op_btn'])
@@ -37,16 +40,36 @@ def begin_btn_cpr(img):
     tmp=begin_btn_def
     #region.save('op_begin_btn.png')
     return imgcompare.image_contrast(region,tmp)
-
+def sanity(img):
+    region=img.crop(boxes['sanity'])
+    sanity=Image.open('ak_ui/sanity.png')
+    tmp=sanity
+    #region.save('op_begin_btn.png')
+    return imgcompare.image_contrast(region,tmp)
+def dosth():
+    if(start_btn_cpr(img_origin)<10):
+            tap(coordinates['start_op'])
+            return True
+    if(begin_btn_cpr(img_origin)<10):
+        tap(coordinates['op_begin'])
+        return True
+    if(sanity(img_origin)<10):
+        input('没有理智了')
+        sys.exit(0)
+    return False
 if(__name__=='__main__'):
-    try:
-        screenshot()
+    flag=True
+    while(flag):
+        try:
+            screenshot()
+        except:
+            print('截屏失败，可能是模拟器未正常启动')
+            #sys.exit(0)
+        #img=Image.open('ak_ui/op_select.png')
+        time.sleep(1)
         img_origin=Image.open('capture.png')
+        if(not dosth()):
+            tap(coordinates['select_op'])
         
-    except:
-        print('截屏失败，可能是模拟器未正常启动')
-        #sys.exit(0)
-    img=Image.open('ak_ui/op_select.png')
-    print(start_btn_cpr(img))
-    
-    img_origin.close()
+        img_origin.close()
+        time.sleep(5)
