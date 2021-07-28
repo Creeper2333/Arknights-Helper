@@ -72,4 +72,4 @@ if(__name__=='__main__'):
             tap(coordinates['select_op'])
         
         img_origin.close()
-        time.sleep(5)
+        time.sleep(3)
