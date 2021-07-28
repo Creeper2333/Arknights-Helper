@@ -14,6 +14,6 @@ python akhelper.py
 
 为了节约资源我在作战的时候设置了一个时间，我默认50secs，你自己调，比如剿灭就调个600sec
 
-如果发现换成别的副本以后开始作战按钮点不上可以考虑把阈值调高（akhelper.py>dosth()）
+如果发现换成别的副本以后开始作战按钮点不上可以考虑把阈值调高（akhelper.py>dosth() 或 akhelper.py>THRESHOLD_VALUE）
 
 adb过期了记得提醒我，或者换夜神模拟器
