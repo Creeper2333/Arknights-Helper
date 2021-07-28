@@ -12,4 +12,6 @@ python akhelper.py
 
 还有那个自动选择关卡的坐标填的是钱本-4和碳本-4的坐标，可以自己改（akhelper.py>coordinates>'select_op'）
 
+为了节约资源我在作战的时候设置了一个时间，我默认50secs，你自己调，比如剿灭就调个600sec
+
 adb过期了记得提醒我，或者换夜神模拟器
