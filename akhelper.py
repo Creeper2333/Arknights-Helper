@@ -24,7 +24,9 @@ boxes={
     'op_begin_btn':(1295,460,1464,808),
     'sanity':(1010,323,1343,606)
 }
+
 flag_isinbattle=False
+flag_sanityempty=False
 
 def screenshot():
     scrcap('/sdcard/capture.png')
@@ -46,21 +48,23 @@ def begin_btn_cpr(img):
     return imgcompare.image_contrast(region,tmp)
 def sanity(img):
     region=img.crop(boxes['sanity'])
-    sanity=Image.open('ak_ui/sanity.png')
+    sanity=Image.open('ak_ui/sanity_default.png')
     tmp=sanity
     #region.save('op_begin_btn.png')
     return imgcompare.image_contrast(region,tmp)
-def dosth():
-    if(start_btn_cpr(img_origin)<10):
+def dosth(img_origin):
+    if(start_btn_cpr(img_origin)<100):
             tap(coordinates['start_op'])
             return True
-    if(begin_btn_cpr(img_origin)<10):
+    if(begin_btn_cpr(img_origin)<100):
         tap(coordinates['op_begin'])
+        global flag_isinbattle
         flag_isinbattle=True
         return True
-    if(sanity(img_origin)<10):
+    if(sanity(img_origin)<100):
         input('没有理智了')
-        sys.exit(0)
+        global flag_sanityempty
+        flag_sanityempty=True
     return False
 if(__name__=='__main__'):
     flag=True
@@ -72,10 +76,20 @@ if(__name__=='__main__'):
             #sys.exit(0)
         #img=Image.open('ak_ui/op_select.png')
         time.sleep(1)#防止文件没有导出完
-        img_origin=Image.open('capture.png')
-        if(not dosth()):
-            tap(coordinates['select_op'])
-        if(flag_isinbattle):
-            time.sleep(TIME_ELAPSE_BATTLE)
-        img_origin.close()
+        try:
+            img_origin=Image.open('capture.png')
+        except:
+            print('文件加载出错，稍后重试...')
+            time.sleep(TIME_ELAPSE_SCRSHOT)
+        try:
+            if(not dosth(img_origin)):
+                tap(coordinates['select_op'])
+            if(flag_isinbattle):
+                time.sleep(TIME_ELAPSE_BATTLE)
+                flag_isinbattle=False
+            if(flag_sanityempty):
+                break
+            img_origin.close()
+        except:
+            pass
         time.sleep(TIME_ELAPSE_SCRSHOT)
