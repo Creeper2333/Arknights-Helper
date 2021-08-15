@@ -1,4 +1,3 @@
-from operator import truediv
 import imgcompare
 from androidops import *
 from PIL import Image
